@@ -1,0 +1,188 @@
+/* Global Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #a9ffd0;
+    margin: 0;
+    padding: 0;
+    color: #495057;
+}
+
+h1, h3, h4 {
+    font-family: 'Poppins', sans-serif;
+    color: #343a40;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+h3, h4 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* General Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-success, .text-danger, .text-warning {
+    font-size: 1.2rem;
+}
+
+/* Buttons */
+button, .btn-primary {
+    background-color: #28a745; /* Green */
+    color: white;
+    padding: 8px 25px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover, .btn-primary:hover {
+    background-color: #218838; /* Darker Green */
+    transform: scale(1.05);
+}
+
+.btn-warning {
+    background-color: #ffc107; /* Yellow */
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800; /* Darker Yellow */
+}
+
+/* Form Section */
+.form-select {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-select:focus {
+    border-color: #28a745; /* Green focus border */
+}
+
+/* Hero Section */
+.hero-section {
+    background-color: #28a745;
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 40px;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    margin-bottom: 40px;
+}
+
+/* Card Layout for Product */
+.card {
+    background-color: #fff;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card-img-top {
+    border-radius: 10px 10px 0 0;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 20px;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.card-price {
+    font-size: 1.25rem;
+    color: #00c983;
+    margin-top: 10px;
+}
+
+/* Collapse Section */
+.collapse table {
+    width: 100%;
+    margin-top: 10px;
+    background-color: #f8f9fa;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+/* List group */
+ul.list-group {
+    margin-bottom: 20px;
+}
+
+.list-group-item {
+    border: none;
+    background-color: #fff;
+    padding: 10px 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.list-group-item:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    .col-md-6 {
+        margin-bottom: 20px;
+    }
+    .list-group-item {
+        padding: 12px 10px;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+    .btn-primary {
+        width: 100%;
+    }
+}
