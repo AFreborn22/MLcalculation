@@ -42,6 +42,10 @@ def predict():
     team1_data = {hero: getHeroData(hero) for hero in team1}
     team2_data = {hero: getHeroData(hero) for hero in team2}
     
+    # Jika ada hero yang belum dipilih
+    if any(hero == "" for hero in team1) or any(hero == "" for hero in team2):
+        return render_template('index.html', heroes=heroes, error="Harap pilih hero untuk semua posisi di kedua tim!")
+    
     # Pastikan bahwa semua hero ditemukan, jika tidak, beri pesan kesalahan
     if any(pd.isnull(value).any() for value in team1_data.values()) or any(pd.isnull(value).any() for value in team2_data.values()):
         return "Beberapa hero tidak ditemukan, harap pilih hero yang valid!", 400
