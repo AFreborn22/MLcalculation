@@ -9,11 +9,11 @@ body {
 }
 
 .background-image {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 112%;
     background-image: url('lod.jpg'); /* Ganti dengan path atau URL gambar */
     background-size: cover; /* Gambar akan menutupi seluruh layar */
     background-position: center center; /* Menempatkan gambar di tengah layar */
