@@ -13,8 +13,8 @@ with open('./models/model.pkl', 'rb') as model_file:
 with open('./models/pca.pkl', 'rb') as model_file:
     pca = pickle.load(model_file)
     
-hero_data = pd.read_csv('./data/list Hero.csv')
-heroes = hero_data['Hero Name'].tolist()
+hero_data = pd.read_csv('./data/fix.csv')
+heroes = hero_data.to_dict(orient='records')
 
 @app.route('/')
 def index():
@@ -51,8 +51,8 @@ def predict():
         return "Beberapa hero tidak ditemukan, harap pilih hero yang valid!", 400
 
     # Menghitung total kekuatan tim
-    team1Strength, team1_data = calculateTeamStrength(team1)
-    team2Strength, team2_data = calculateTeamStrength(team2)
+    team1Strength, team1_data, unmatchedLane1 = calculateTeamStrength(team1)
+    team2Strength, team2_data, unmatchedLane2 = calculateTeamStrength(team2)
 
     # Menghitung persentase kemenangan berdasarkan kekuatan tim
     team1WinPercentage, team2WinPercentage, team1_data, team2_data = calculateWinPercentage(team1, team2)
@@ -60,8 +60,8 @@ def predict():
     # Ambil semua data fitur untuk analisis dan prediksi
     match_data = generateMatchData(team1, team2, team1_data, team2_data)
     
-    print(team1_data)
-    print(team2_data)
+    print(team1)
+    print(team2)
     
     numeric_data = {key: value for key, value in match_data.items() if key not in ['Hero Name', 'Role']}
     numeric_values = [list(numeric_data.values())]  # Pastikan menjadi array 2D
@@ -86,6 +86,8 @@ def predict():
         'team1_data': team1_data,  
         'team2_data': team2_data
     }
+    
+    print(prediction)
 
     return render_template('result.html', result=result)
 

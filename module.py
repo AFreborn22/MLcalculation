@@ -1,6 +1,15 @@
 import pandas as pd
 
 data = pd.read_csv('./data/list Hero.csv')
+df = pd.read_csv('./data/fix.csv')
+
+index_to_lane = {
+        0: 'Jungler',
+        1: 'Mid Laner',
+        2: 'Gold Laner',
+        3: 'Exp Lane',
+        4: 'Roam'
+    }
 
 def getHeroData(hero_name):
     heroData = data[data['Hero Name'].str.lower() == hero_name.lower()]
@@ -8,29 +17,80 @@ def getHeroData(hero_name):
         return heroData.iloc[0]
     else:
         return None
-    
+
+def matchingHeroLane(dataHero, idx):
+    unmatchedLane = 0
+
+    if isinstance(dataHero, dict):
+        dataHero = pd.Series(dataHero)
+
+    heroName = dataHero['Hero Name']
+
+    if heroName is not None:
+        # Ambil Recommended Lane dan Second Lane dari df
+        hero_row = df[df['Hero Name'] == heroName]
+        if not hero_row.empty:
+            recLane = hero_row['Recommended Lane'].iloc[0]
+            secLane = hero_row['Second Lane'].iloc[0]
+            # Ambil lane yang sesuai dengan idx
+            target_lane = index_to_lane.get(idx)
+            
+            # Periksa apakah lane sesuai
+            if recLane != target_lane and (pd.isna(secLane) or secLane != target_lane):
+                unmatchedLane = 1
+        else:
+            print(f"Hero {heroName} tidak ditemukan di df.")
+            unmatchedLane = 1  # Anggap tidak cocok jika hero tidak ditemukan
+    else:
+        print("dataHero is empty")
+        unmatchedLane = 1
+
+    return unmatchedLane
+
 def calculateTeamStrength(team):
     totalStrength = 0
     hero_data = {}
-    for hero in team:
+    
+    for i, hero in enumerate(team):
         data = getHeroData(hero)
+        
+        unmatchedLane = matchingHeroLane(data, i)
+
         if data is not None:
             totalStrength += data['Strength Rating (%)']
             hero_data[hero] = data  
         else:
             print(f"Hero {hero} tidak ditemukan dalam dataset.")
-    return totalStrength, hero_data
+
+    return totalStrength, hero_data, unmatchedLane
 
 def calculateWinPercentage(team1, team2):
-    team1Strength, team1_data = calculateTeamStrength(team1)
-    team2Strength, team2_data = calculateTeamStrength(team2)
+    team1Strength, team1_data, unmatchedLane1 = calculateTeamStrength(team1)
+    team2Strength, team2_data, unmatchedLane2 = calculateTeamStrength(team2)
     
-    if team1Strength == team2Strength:
-        return 50, 50, team1_data, team2_data
-
     totalStrength = team1Strength + team2Strength
-    team1WinPercentage = (team1Strength / totalStrength) * 100
-    team2WinPercentage = (team2Strength / totalStrength) * 100
+    if totalStrength == 0:  # Hindari pembagian dengan nol
+        return 50.0, 50.0, team1_data, team2_data
+
+    team1Base = (team1Strength / totalStrength) * 100
+    team2Base = (team2Strength / totalStrength) * 100
+    
+    # Terapkan penalti dari lane yang tidak cocok (anggap 5% per mismatch)
+    penalty_per_unmatched = 25
+    team1Penalty = unmatchedLane1 * penalty_per_unmatched
+    team2Penalty = unmatchedLane2 * penalty_per_unmatched
+
+    team1WinPercentage = max(team1Base - team1Penalty, 0)
+    team2WinPercentage = max(team2Base - team2Penalty, 0)
+
+    # Normalisasi ulang agar total tetap 100%
+    total = team1WinPercentage + team2WinPercentage
+    if total > 0:
+        team1WinPercentage = (team1WinPercentage / total) * 100
+        team2WinPercentage = (team2WinPercentage / total) * 100
+    else:
+        team1WinPercentage = 50.0
+        team2WinPercentage = 50.0
 
     return team1WinPercentage, team2WinPercentage, team1_data, team2_data
 
